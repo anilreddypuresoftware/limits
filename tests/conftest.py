@@ -8,12 +8,11 @@ import pymongo
 import pytest
 import redis
 import redis.sentinel
-import rediscluster
 
 
 def check_redis_cluster_ready(*_):
     try:
-        rediscluster.RedisCluster("localhost", 7001).cluster_info()
+        redis.cluster.RedisCluster("localhost", 7001).cluster_info()
         return True
     except:  # noqa
         return False
@@ -112,7 +111,7 @@ def redis_cluster_client(docker_services):
     docker_services.start("redis-cluster-init")
     docker_services.wait_for_service("redis-cluster-1", 7001, check_redis_cluster_ready)
 
-    return rediscluster.RedisCluster("localhost", 7001)
+    return redis.cluster.RedisCluster("localhost", 7001)
 
 
 @pytest.fixture(scope="session")

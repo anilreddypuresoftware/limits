@@ -190,7 +190,8 @@ Requires the location(s) of the redis cluster startup nodes (One is enough).
 :code:`redis+cluster://localhost:7000`
 or :code:`redis+cluster://localhost:7000,localhost:7001`
 
-Depends on: :pypi:`redis-py-cluster`
+Depends on: :pypi:`redis` (``>4.1``). For backward compatibility if the redis version
+is lower and :pypi:`redis-py-cluster` is found, that will be used instead.
 
 MongoDB
 -------
