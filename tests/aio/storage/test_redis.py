@@ -73,7 +73,7 @@ class AsyncSharedRedisTests:
 
         while time.time() - last <= 1:
             await asyncio.sleep(0.05)
-        assert await self.storage.storage.keys("%s/*" % limit.namespace) == []
+        assert not await self.storage.storage.keys("%s/*" % limit.namespace)
 
     @pytest.mark.asyncio
     async def test_connectivity(self):
