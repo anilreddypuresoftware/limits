@@ -45,10 +45,16 @@ jobs:
         python-version: [3.7, 3.8, 3.9, "3.11.0-alpha.6"]
         marker: [not integration]
         os: [ubuntu-latest]
+        legacy_cluster: [False]
         include:
           - python-version: "3.10"
             marker: ''
             os: ubuntu-latest
+            legacy_cluster: False
+          - python-version: "3.10"
+            marker: 'not integration'
+            os: ubuntu-latest
+            legacy_cluster: True
     runs-on: "${{ matrix.os }}"
     steps:
     - uses: actions/checkout@v3
@@ -68,6 +74,11 @@ jobs:
         python -m pip install "pip<22"
         python -m pip install --upgrade setuptools wheel
         pip install -r requirements/ci.txt
+    - name: Install redis-py-cluster
+      if: ${{ matrix.legacy_cluster }}
+      run: |
+        pip uninstall -y redis
+        pip install redis-py-cluster
     - name: Tests
       run: |
         py.test -m "${{ matrix.marker }}" --cov-report=xml --cov-branch --max-runs=3
