@@ -31,7 +31,7 @@ jobs:
         pip install -r requirements/ci.txt
         pip install limits[rediscluster]
         pip install limits[async-redis]
-        python -m pytest
+        py.test -m "not integration" --cov-report=xml --cov-branch 
   armv64_job:
       name: Build and Test for arm64
       runs-on: ubuntu-20.04
@@ -63,6 +63,7 @@ jobs:
               pip3 install hiro && \
               pip install pytest-cov && \
               pip install --upgrade setuptools && \
-              python -m pytest && \
+              pip install pytest-lazy-fixture && \
+              py.test -m "not integration" --cov-report=xml --cov-branch  && \
               deactivate'
     
