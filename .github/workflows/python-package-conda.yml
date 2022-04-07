@@ -61,6 +61,8 @@ jobs:
               
               pip3 install redis-py-cluster && \
               pip3 install hiro && \
+              pip install pytest-cov && \
+              pip install --upgrade setuptools && \
               py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3 && \
               deactivate'
     
