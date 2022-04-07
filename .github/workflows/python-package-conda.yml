@@ -64,6 +64,11 @@ jobs:
               pip install pytest-cov && \
               pip install --upgrade setuptools && \
               pip install pytest-lazy-fixture && \
+              git clone --recursive git@github.com:emcache/emcache && \
+              pushd vendor/murmur3 && \
+              make static && \
+              popd && \
+              make install-dev && \
               pip install -r requirements/ci.txt && \
               py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3 && \
               deactivate'
