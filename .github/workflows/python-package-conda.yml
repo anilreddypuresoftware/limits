@@ -31,7 +31,7 @@ jobs:
         pip install -r requirements/ci.txt
         pip install limits[rediscluster]
         pip install limits[async-redis]
-        py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3
+        python -m pytest
   armv64_job:
       name: Build and Test for arm64
       runs-on: ubuntu-20.04
@@ -63,6 +63,6 @@ jobs:
               pip3 install hiro && \
               pip install pytest-cov && \
               pip install --upgrade setuptools && \
-              py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3 && \
+              python -m pytest && \
               deactivate'
     
