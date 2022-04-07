@@ -1,0 +1,64 @@
+name: Python Package using Conda
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
+    - name: Install dependencies
+      run: |
+        conda create -q -y --name testenv python=3.8 cython numpy pytest psutil pip
+        conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls
+    - name: Test with pytest
+      run: |
+        conda install pytest
+        pip install redis-py-cluster
+        python -m pip install "pip<22"
+        python -m pip install --upgrade setuptools wheel
+        pip install -r requirements/ci.txt
+        py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3
+  armv64_job:
+      name: Build and Test for arm64
+      runs-on: ubuntu-20.04
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set up QEMU
+          id: qemu
+          uses: docker/setup-qemu-action@v1
+        - name: Install and Run tests
+          run: |
+            docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+              arm64v8/ubuntu:20.04 \
+              bash -exc 'apt-get update && apt-get -y install memcached libmemcached-dev memcached redis libmemcached-tools memcached libmemcached-dev zlib1g-dev redis-server python3 python3-pip python3-venv curl && \
+              python3 -m pip install virtualenv && python3 -m venv py38-venv && \
+              source py38-venv/bin/activate && \
+              python3 -m pip install "pip<22" && \
+              python3 -m pip install --upgrade setuptools wheel && \
+              pip3 install pytest && \
+              
+              pip install limits[rediscluster] &&\
+              pip install limits[memcached] && \
+              pip install limits[mongodb] && \
+              pip install limits[async-redis] && \
+              
+              pip install limits[async-mongodb] && \
+              pip3 install pymongo && \
+              pip3 install -r requirements/ci.txt && \
+              pip3 install redis-py-cluster && \
+              pip3 install hiro && \
+              py.test -m  --cov-report=xml --cov-branch --max-runs=3&& \
+              deactivate'
+    
