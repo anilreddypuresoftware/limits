@@ -10,10 +10,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.8
+    - name: Set up Python 3.7
       uses: actions/setup-python@v3
       with:
-        python-version: 3.8
+        python-version: 3.7
     - name: Add conda to system path
       run: |
         # $CONDA is an environment variable pointing to the root of the miniconda directory
@@ -43,8 +43,8 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
               arm64v8/ubuntu:20.04 \
               bash -exc 'apt-get update && apt-get -y install memcached libmemcached-dev memcached redis libmemcached-tools memcached libmemcached-dev zlib1g-dev redis-server python3 python3-pip python3-venv curl && \
-              python3 -m pip install virtualenv && python3 -m venv py38-venv && \
-              source py38-venv/bin/activate && \
+              python3 -m pip install virtualenv && python3 -m venv py37-venv && \
+              source py37-venv/bin/activate && \
               python3 -m pip install "pip<22" && \
               python3 -m pip install --upgrade setuptools wheel && \
               pip3 install pytest && \
