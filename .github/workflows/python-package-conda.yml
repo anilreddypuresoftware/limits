@@ -49,10 +49,10 @@ jobs:
               bash -exc 'apt-get update && apt-get -y install git memcached libmemcached-dev memcached redis libmemcached-tools memcached libmemcached-dev zlib1g-dev redis-server python3 python3-pip python3-venv curl && \
               python3 -m pip install virtualenv && python3 -m venv py"3.8"-venv && \
               source py"3.8"-venv/bin/activate && \
-              - name: Add conda to system path
-                run: |
-                  # $CONDA is an environment variable pointing to the root of the miniconda directory
-                  echo $CONDA/bin >> $GITHUB_PATH
+        - name: Add conda to system path
+          run: |
+              # $CONDA is an environment variable pointing to the root of the miniconda directory
+              echo $CONDA/bin >> $GITHUB_PATH
         - name: Install dependencies
           run: |
               conda create -q -y --name testenv python="3.8" cython numpy pytest psutil pip
