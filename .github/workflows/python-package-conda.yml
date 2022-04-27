@@ -67,6 +67,6 @@ jobs:
               pip install pytest-lazy-fixture && \
               
               
-              py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3 && \
+              py.test -m "not integration" --cov-report=xml --cov-branch  && \
               deactivate'
     
