@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.10"]
+        python-version: [3.8]
     steps:
     - uses: actions/checkout@v3
     - name: Cache dependencies
@@ -42,11 +42,11 @@ jobs:
   test:
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.11.0-alpha.6"]
+        python-version: [3.8]
         marker: [not integration]
         os: [ubuntu-latest]
         include:
-          - python-version: "3.10"
+          - python-version: "3.8"
             marker: ''
             os: ubuntu-latest
     runs-on: "${{ matrix.os }}"
@@ -132,4 +132,39 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
 
-
+  armv64_job:
+      name: Build and Test for arm64
+      runs-on: ubuntu-20.04
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set up QEMU
+          id: qemu
+          uses: docker/setup-qemu-action@v1
+        - name: Install and Run tests
+          run: |
+            docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+              arm64v8/ubuntu:20.04 \
+              bash -exc 'apt-get update && apt-get -y install git memcached libmemcached-dev memcached redis libmemcached-tools memcached libmemcached-dev zlib1g-dev redis-server python3 python3-pip python3-venv curl && \
+              python3 -m pip install virtualenv && python3 -m venv py"3.10"-venv && \
+              source py"3.10"-venv/bin/activate && \
+              python3 -m pip install "pip<22" && \
+              python3 -m pip install --upgrade setuptools wheel && \
+              pip3 install pytest && \
+              
+              pip install limits[rediscluster] &&\
+              pip install limits[memcached] && \
+              pip install limits[mongodb] && \
+              pip install limits[async-redis] && \
+              
+              pip install limits[async-mongodb] && \
+              pip3 install pymongo && \
+              
+              pip3 install redis-py-cluster && \
+              pip3 install hiro && \
+              pip install pytest-cov && \
+              pip install --upgrade setuptools && \
+              pip install pytest-lazy-fixture && \
+              pip install --upgrade -v emcache && \
+              pip install -r requirements/ci.txt && \
+              py.test -m "not integration" --cov-report=xml --cov-branch --max-runs=3 && \
+              deactivate'
