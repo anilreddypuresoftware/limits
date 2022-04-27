@@ -53,8 +53,8 @@ jobs:
                 run: |
                   # $CONDA is an environment variable pointing to the root of the miniconda directory
                   echo $CONDA/bin >> $GITHUB_PATH
-              - name: Install dependencies
-                run: |
+        - name: Install dependencies
+          run: |
                   conda create -q -y --name testenv python="3.8" cython numpy pytest psutil pip
                   conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls  
                   pip install redis-py-cluster && \
