@@ -49,11 +49,10 @@ jobs:
               python3 -m pip install virtualenv && python3 -m venv py38-venv && \
               source py38-venv/bin/activate && \
        
-              # $CONDA is an environment variable pointing to the root of the miniconda directory
-              echo $CONDA/bin >> $GITHUB_PATH
+              
         
-              conda create -q -y --name testenv python="3.8" cython numpy pytest psutil pip
-              conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls  
+              conda create -q -y --name testenv python="3.8" cython numpy pytest psutil pip && \
+              conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls && \  
               pip install redis-py-cluster && \
               python3 -m pip install "pip<22" && \
               python3 -m pip install --upgrade setuptools wheel && \
