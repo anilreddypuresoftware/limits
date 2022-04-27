@@ -55,13 +55,13 @@ jobs:
                   echo $CONDA/bin >> $GITHUB_PATH
         - name: Install dependencies
           run: |
-                  conda create -q -y --name testenv python="3.8" cython numpy pytest psutil pip
-                  conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls  
-                  pip install redis-py-cluster && \
-                  python3 -m pip install "pip<22" && \
-                  python3 -m pip install --upgrade setuptools wheel && \
-                  pip install -r requirements/ci.txt && \
-                  python -m pip install --upgrade pip && \
-                  py.test -m "not integration" --cov-report=xml --cov-branch  && \
-                  deactivate'
+              conda create -q -y --name testenv python="3.8" cython numpy pytest psutil pip
+              conda install -c conda-forge pip numpy scipy coverage scikit-learn!=0.19.0 matplotlib numba ffmpeg libsndfile pysoundfile coveralls  
+              pip install redis-py-cluster && \
+              python3 -m pip install "pip<22" && \
+              python3 -m pip install --upgrade setuptools wheel && \
+              pip install -r requirements/ci.txt && \
+              python -m pip install --upgrade pip && \
+              py.test -m "not integration" --cov-report=xml --cov-branch  && \
+              deactivate'
     
