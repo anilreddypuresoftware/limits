@@ -65,7 +65,7 @@ jobs:
               pip install pytest-cov && \
               pip install --upgrade setuptools && \
               pip install pytest-lazy-fixture && \
-              
+              pip install -r requirements/ci.txt && \
               
               py.test -m "not integration" --cov-report=xml --cov-branch  && \
               deactivate'
