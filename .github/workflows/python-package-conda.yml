@@ -41,7 +41,6 @@ jobs:
         - name: Set up QEMU
           id: qemu
           uses: docker/setup-qemu-action@v1
-        
         - name: Install and Run tests
           run: |
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
